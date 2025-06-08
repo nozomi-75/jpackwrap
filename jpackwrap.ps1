@@ -48,7 +48,7 @@ $ErrorActionPreference = "Stop"
 
 # Reads pom.xml and extracts artifactId and version
 function Get-ProjectMetadata {
-    Write-Host "`nParsing pom.xml..."
+    Write-Host "`nParsing pom.xml..." -ForegroundColor Green
     if (-not (Test-Path "pom.xml")) {
         throw "pom.xml not found in current directory. Run the script from your Maven project's root."
     }
@@ -113,7 +113,7 @@ function Find-FatJar {
 
 # Build the project
 function Build-Project {
-    Write-Host "`nBuilding project with Maven...`n"
+    Write-Host "`nBuilding project with Maven...`n" -ForegroundColor Green
     mvn clean package
     if ($LASTEXITCODE -ne 0) {
         throw "Maven build failed."
@@ -131,7 +131,7 @@ function Resolve-OutputDir {
 function Invoke-JPackage {
     param ($platform, $metadata, $jarName, $mainClass, $iconPath, $licenseFile, $outputDir, $vendor, $description)
 
-    Write-Host "`nPackaging with jpackage..."
+    Write-Host "`nPackaging with jpackage..." -ForegroundColor Green
     $arguments = @(
         "--name", $metadata.Name,
         "--app-version", $metadata.Version,
@@ -186,4 +186,4 @@ $iconPath = Find-Icon -platform $platform -iconPrefix $IconPrefix
 Invoke-JPackage -platform $platform -metadata $metadata -jarName $jarName -mainClass $MainClass -iconPath $iconPath -licenseFile $LicenseFile -outputDir $OutputDir -vendor $VendorName -description $Description
 
 $outputPath = Resolve-OutputDir
-Write-Host "Package created successfully in '$outputPath'."
+Write-Host "Package created successfully in '$outputPath'." -ForegroundColor Blue
