@@ -1,6 +1,6 @@
 # jpackwrap
 
-Cross-platform standalone PowerShell wrapper to built and package Maven-based Java apps using `jpackage`. It simplifies the creation of native installers for Java applications.
+Cross-platform standalone PowerShell wrapper to build and package Maven-based Java apps using `jpackage`. It simplifies the creation of native installers for Java applications.
 
 ## 📦 Features
 
