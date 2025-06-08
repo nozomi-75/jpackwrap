@@ -24,20 +24,24 @@
 .PARAMETER VendorName
     Registered vendor/author name in the output package
 
-.EXAMPLE
-    .\java-app-packager.ps1 -MainClass "com.example.MainApp"
+.PARAMETER Description
+    A brief description of the program
 
 .EXAMPLE
-    .\java-app-packager.ps1 -MainClass "com.example.MainApp" -OutputDir "dist"
+    .\jpackwrap.ps1 -MainClass "com.example.MainApp"
+
+.EXAMPLE
+    .\jpackwrap.ps1 -MainClass "com.example.MainApp" -OutputDir "dist"
 
 #>
 
 param (
-    [string]$MainClass,                         # Fully qualified main class (e.g., com.example.Main)
-    [string]$LicenseFile = "LICENSE",           # Path to the license file
-    [string]$IconPrefix = "appicon",            # Base name of the icon file (no extension)
-    [string]$OutputDir = ".",                   # Output directory for the final package
-    [string]$VendorName = "Unknown"             # Author/vendor name for the final package
+    [string]$MainClass,
+    [string]$VendorName = "Unknown",
+    [string]$LicenseFile = "LICENSE",
+    [string]$IconPrefix = "appicon",
+    [string]$OutputDir = ".",
+    [string]$Description = "A Java application."
 )
 
 $ErrorActionPreference = "Stop"
@@ -125,7 +129,7 @@ function Resolve-OutputDir {
 
 # Constructs and executes the jpackage command based on platform and inputs
 function Invoke-JPackage {
-    param ($platform, $metadata, $jarName, $mainClass, $iconPath, $licenseFile, $outputDir, $vendor)
+    param ($platform, $metadata, $jarName, $mainClass, $iconPath, $licenseFile, $outputDir, $vendor, $description)
 
     Write-Host "`nPackaging with jpackage..."
     $arguments = @(
@@ -136,7 +140,7 @@ function Invoke-JPackage {
         "--main-class", $mainClass,
         "--dest", $outputDir,
         "--vendor", $vendor,
-        "--description", "$($metadata.Name) Java Application",
+        "--description", "$description",
         "--license-file", $licenseFile
     )
 
@@ -179,7 +183,7 @@ $jarName = Find-FatJar
 
 $iconPath = Find-Icon -platform $platform -iconPrefix $IconPrefix
 
-Invoke-JPackage -platform $platform -metadata $metadata -jarName $jarName -mainClass $MainClass -iconPath $iconPath -licenseFile $LicenseFile -outputDir $OutputDir -vendor $VendorName
+Invoke-JPackage -platform $platform -metadata $metadata -jarName $jarName -mainClass $MainClass -iconPath $iconPath -licenseFile $LicenseFile -outputDir $OutputDir -vendor $VendorName -description $Description
 
 $outputPath = Resolve-OutputDir
 Write-Host "Package created successfully in '$outputPath'."
