@@ -1,7 +1,36 @@
-# Cross-platform Java app packager using Maven + jpackage
-# This script builds and packages a Maven-based Java application into a native installer using jpackage.
-# It automatically detects OS, reads pom.xml for project metadata, builds the app, and invokes jpackage with suitable options.
-# It requires PowerShell 5+ and a JDK with jpackage (e.g., JDK 14+).
+<#
+.SYNOPSIS
+    Builds and packages a Maven-based Java app into a native installer using jpackage.
+
+.DESCRIPTION
+    This script:
+    - Parses pom.xml for project info
+    - Checks for Maven and jpackage
+    - Builds the project using Maven
+    - Packages it using jpackage with the appropriate settings for your OS
+
+.PARAMETER MainClass
+    Fully qualified Java main class (e.g., com.example.MainApp)
+
+.PARAMETER LicenseFile
+    Path to the license file. Default: LICENSE
+
+.PARAMETER IconPrefix
+    Base name (no extension) for icon in src/main/resources/icons/. Default: appicon
+
+.PARAMETER OutputDir
+    Directory to place the installer. Default: current directory
+
+.PARAMETER VendorName
+    Registered vendor/author name in the output package
+
+.EXAMPLE
+    .\java-app-packager.ps1 -MainClass "com.example.MainApp"
+
+.EXAMPLE
+    .\java-app-packager.ps1 -MainClass "com.example.MainApp" -OutputDir "dist"
+
+#>
 
 param (
     [string]$MainClass,                         # Fully qualified main class (e.g., com.example.Main)
